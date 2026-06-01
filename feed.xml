@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title>Pixeltable Content Engine</title>
+    <link>https://chrisclone.github.io/pixeltable-content-feed/feed.xml</link>
+    <description>Machine-generated, real-executed Pixeltable how-to articles.</description>
+    <atom:link href="https://chrisclone.github.io/pixeltable-content-feed/feed.xml" rel="self"/>
+    <docs>http://www.rssboard.org/rss-specification</docs>
+    <generator>python-feedgen</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 01 Jun 2026 23:19:15 +0000</lastBuildDate>
+    <item>
+      <title>Linear Scaling Video VLMs for Long Video Understanding, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/linear-scaling-video-vlms-for-long-video-understanding.html</link>
+      <description>A hands-on, runnable walkthrough using video — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Linear Scaling Video VLMs for Long Video Understanding, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/linear-scaling-video-vlms-for-long-video-understanding/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using video — with real, executed output.</em></p>
+<p>Long video understanding hit an inflection point in 2026. Linear-scaling Video VLMs — models that grow their context proportionally rather than quadratically with frame count — finally made hour-long video inference practical without melting your GPU budget. Between Veo pushing generation quality forward and ffmpeg remaining the universal knife for frame extraction, the tooling side of video AI is maturing fast. But the infrastructure between "I have frames" and "I have answers" remains a mess of bespoke scripts, and that gap grows wider as fine-tuning and inference pipelines get more complex.</p>
+<p>The core problem isn't the model. It's everything around it: extracting frames, resizing them, routing them through embeddings or VLMs, storing results alongside the source material, and keeping all of it consistent when you add new data. Most teams end up with a tangle of shell scripts piping ffmpeg output into Python glue that writes to three different stores. It works until it doesn't.</p>
+<p><a href="https://github.com/pixeltable/pixeltable">Pixeltable</a> takes a different approach. It gives you a declarative table where transforms are <em>computed columns</em> — define them once, and they stay in sync as data arrives. No DAGs, no orchestrators, no batch jobs to babysit. The same pattern works whether your column holds a scalar, an image, a video clip, or a model output.</p>
+<h2>Computed columns in practice</h2>
+<p>The concept is easier to show than explain. Here we build a multimodal image table, then add computed columns that derive new values automatically. Every future insert gets the same transforms with zero additional code.</p>
+<pre><code class="language-python">import pixeltable as pxt
+from PIL import Image
+
+# A fresh, isolated workspace.
+pxt.drop_dir(&quot;demo&quot;, force=True)
+pxt.create_dir(&quot;demo&quot;)
+
+# Generate a few local images so the example is fully offline.
+import tempfile, os
+tmp = tempfile.mkdtemp()
+paths = []
+for i, color in enumerate([(220, 50, 50), (50, 180, 90), (60, 90, 220)]):
+    p = os.path.join(tmp, f&quot;img_{i}.png&quot;)
+    Image.new(&quot;RGB&quot;, (256 + i * 32, 192), color).save(p)
+    paths.append(p)
+
+# Declare a table with an image column and insert the rows.
+t = pxt.create_table(&quot;demo.images&quot;, {&quot;img&quot;: pxt.Image, &quot;label&quot;: pxt.String})
+t.insert([{&quot;img&quot;: p, &quot;label&quot;: l} for p, l in zip(paths, [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;])])
+
+# Computed columns: derived automatically and kept in sync on insert.
+t.add_computed_column(width=t.img.width)
+t.add_computed_column(height=t.img.height)
+t.add_computed_column(thumb=t.img.resize([96, 96]))
+
+print(t.select(t.label, t.width, t.height).collect())
+</code></pre>
+<p>Here is the actual output from running that snippet:</p>
+<p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/linear-scaling-video-vlms-for-long-video-understanding/example.png"></p>
+<pre><code>label  width  height
+0    red    256     192
+1  green    288     192
+2   blue    320     192
+</code></pre>
+<p>That's real execution, not a mockup. The <code>width</code>, <code>height</code>, and <code>thumb</code> columns were derived automatically at insert time. Add a thousand more rows tomorrow and every one gets the same transforms without touching the pipeline.</p>
+<h2>Why this matters for video workflows</h2>
+<p>Now picture the video version. Replace the image column with a video column. Replace <code>t.img.width</code> with a computed column that calls ffmpeg to extract keyframes, another that runs each frame through a VLM for captioning, another that generates embeddings for retrieval. The <em>shape</em> of the code stays the same — declare the table, define the transforms, insert data. Pixeltable handles execution order, caching, and incremental updates.</p>
+<p>This is the piece that linear-scaling VLMs need on the infrastructure side. A model that can process an hour of video in linear time is only useful if the pipeline feeding it frames, metadata, and context can keep up without collapsing into a maintenance burden. Declarative computed columns solve that: you describe what you want derived, and the system figures out how and when to compute it.</p>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Drop the snippet above into a script and run it. Swap the toy images for video frames, the resize for a model call, and you have the skeleton of a production pipeline. Full docs: <a href="https://docs.pixeltable.com">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/jenueldev/gemini-omni-makes-video-generation-feel-more-like-editing-3434">Gemini Omni makes video generation feel more like editing</a></li>
+<li><a href="https://dev.to/hiy_dev/claude-code-video-skills-a-developers-practical-guide-to-all-6-options-2026-4f40">Claude Code Video Skills: A Developer's Practical Guide to All 6 Options (2026)</a></li>
+<li><a href="https://dev.to/tokenmixai/veo-4-release-date-70-odds-for-google-io-2026-veo-31-lite-live-500e">Veo 4 Release Date: 70% Odds for Google I/O 2026 (Veo 3.1 Lite Live)</a></li>
+<li><a href="https://dev.to/masonwritescode/i-tested-5-managed-video-apis-back-to-back-heres-the-rig-and-what-shipped-15hf">I tested 5 managed video APIs back-to-back — here's the rig and what shipped</a></li>
+<li><a href="https://dev.to/tokenmixai/veo-4-doesnt-exist-yet-but-people-are-already-selling-it-3ch9">Veo 4 Doesn't Exist Yet, But People Are Already Selling It</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/linear-scaling-video-vlms-for-long-video-understanding.html</guid>
+      <category>video</category>
+      <category>inference</category>
+      <category>fine-tuning</category>
+      <category>2026</category>
+      <category>veo</category>
+      <pubDate>Mon, 01 Jun 2026 23:12:23 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
