@@ -8,7 +8,77 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 01 Jun 2026 23:23:42 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2026 03:55:05 +0000</lastBuildDate>
+    <item>
+      <title>Launch HN: Expanse (YC P26) – Unlock Wasted GPU Capacity, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/launch-hn-expanse-yc-p26-unlock-wasted-gpu-capacity.html</link>
+      <description>A hands-on, runnable walkthrough using multimodal — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Launch HN: Expanse (YC P26) – Unlock Wasted GPU Capacity, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/launch-hn-expanse-yc-p26-unlock-wasted-gpu-capacity/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using multimodal — with real, executed output.</em></p>
+<p>Expanse's YC launch put a spotlight on something most teams already feel: GPU capacity is not the bottleneck anymore. The bottleneck is the glue code between your data and the models that consume it. Every multimodal pipeline -- whether it's embedding video frames for RAG, routing images through an LLM agent, or indexing audio for search -- follows the same pattern: load data, transform it, derive new columns, keep everything in sync. And every team writes that plumbing from scratch, poorly, in a tangle of scripts that nobody wants to maintain.</p>
+<p><a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a> replaces that tangle with a single abstraction: a declarative table where transforms are computed columns. You define the derivation once. New rows get the same transforms automatically. No DAG orchestrator, no batch scheduler, no glue.</p>
+<h2>Build a multimodal image table in 20 lines</h2>
+<p>The best way to see what this means is to run it. The example below creates a table of images, then adds computed columns that extract width, height, and a thumbnail -- all derived automatically from the source column. No loops, no manual bookkeeping.</p>
+<pre><code class="language-python">import pixeltable as pxt
+from PIL import Image
+
+# A fresh, isolated workspace.
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+# Generate a few local images so the example is fully offline.
+import tempfile, os
+tmp = tempfile.mkdtemp()
+paths = []
+for i, color in enumerate([(220, 50, 50), (50, 180, 90), (60, 90, 220)]):
+    p = os.path.join(tmp, f"img_{i}.png")
+    Image.new("RGB", (256 + i * 32, 192), color).save(p)
+    paths.append(p)
+
+# Declare a table with an image column and insert the rows.
+t = pxt.create_table("demo.images", {"img": pxt.Image, "label": pxt.String})
+t.insert([{"img": p, "label": l} for p, l in zip(paths, ["red", "green", "blue"])])
+
+# Computed columns: derived automatically and kept in sync on insert.
+t.add_computed_column(width=t.img.width)
+t.add_computed_column(height=t.img.height)
+t.add_computed_column(thumb=t.img.resize([96, 96]))
+
+print(t.select(t.label, t.width, t.height).collect())
+</code></pre>
+<p>Here is the actual output from running that snippet:</p>
+<p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/launch-hn-expanse-yc-p26-unlock-wasted-gpu-capacity/example.png"></p>
+<pre><code>label  width  height
+0    red    256     192
+1  green    288     192
+2   blue    320     192
+</code></pre>
+<p>That is not a mockup. The code executed, the table was created, and those are the real values. The interesting part is what happens next: insert a fourth row and Pixeltable computes <code>width</code>, <code>height</code>, and <code>thumb</code> for it without you asking. The column definitions are the pipeline.</p>
+<h2>Why this matters for the GPU-capacity conversation</h2>
+<p>Expanse and projects like it are making raw compute cheaper and more available. That shifts the constraint. When GPU hours are abundant, the limiting factor becomes how fast you can get data into and out of models -- and how reliably your transforms stay consistent as data changes. This is exactly the problem computed columns solve.</p>
+<p>Swap the toy transforms above for real ones -- a CLIP embedding column, a frame-extraction UDF over video, an LLM classification call -- and the shape of the code stays identical. You declare the column, Pixeltable handles execution, caching, and incremental updates. The same table can hold images, video, audio, and text alongside scalar metadata. Multimodal is not a special mode; it is the default.</p>
+<h2>Where to go from here</h2>
+<p>Install and run the example above in under a minute:</p>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>From there, the practical next steps: add an embedding column backed by a real model, attach a similarity index, and query it. The <a href="https://docs.pixeltable.com" rel="noopener noreferrer">docs</a> walk through each of those. The underlying point stays the same -- stop writing orchestration code and start declaring what you want computed.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/rileykim/quick-tip-benchmarking-multimodal-apis-in-under-10-minutes-36f" rel="noopener noreferrer">Quick Tip: Benchmarking Multimodal APIs in Under 10 Minutes</a></li>
+<li><a href="https://dev.to/tsubasa_tech/beyond-transcription-multimodal-video-and-audio-analysis-with-snowflake-aicomplete-3g7c" rel="noopener noreferrer">Beyond Transcription - Multimodal Video and Audio Analysis with Snowflake AI_COMPLETE</a></li>
+<li><a href="https://dev.to/wonderlab/rag-series-23-multimodal-rag-images-and-tables-can-be-retrieved-too-3gj5" rel="noopener noreferrer">RAG Series (23): Multimodal RAG — Images and Tables Can Be Retrieved Too</a></li>
+<li><a href="https://dev.to/joseph_anady_214bacedf939/multimodal-search-6oc" rel="noopener noreferrer">Multimodal Search</a></li>
+<li><a href="https://dev.to/jangwook_kim_e31e7291ad98/nvidia-nemotron-3-nano-omni-multimodal-agent-dev-guide-54d7" rel="noopener noreferrer">NVIDIA Nemotron 3 Nano Omni: Multimodal Agent Dev Guide</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/launch-hn-expanse-yc-p26-unlock-wasted-gpu-capacity.html</guid>
+      <category>multimodal</category>
+      <category>embedding</category>
+      <category>rag</category>
+      <category>llm</category>
+      <category>agent</category>
+      <pubDate>Tue, 02 Jun 2026 03:55:05 +0000</pubDate>
+    </item>
     <item>
       <title>Linear Scaling Video VLMs for Long Video Understanding, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/linear-scaling-video-vlms-for-long-video-understanding.html</link>
