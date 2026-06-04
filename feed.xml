@@ -8,7 +8,92 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 03 Jun 2026 14:00:19 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 14:00:23 +0000</lastBuildDate>
+    <item>
+      <title>Gemma 4 12B: A unified, encoder-free multimodal model, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/gemma-4-12b-a-unified-encoder-free-multimodal-model.html</link>
+      <description>A hands-on, runnable walkthrough using multimodal — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Gemma 4 12B: A unified, encoder-free multimodal model, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/gemma-4-12b-a-unified-encoder-free-multimodal-model/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using multimodal — with real, executed output.</em></p>
+<p>Gemma 4 12B: A unified, encoder-free multimodal model keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>multimodal, rag, agent, qwen, 3.7, 2026</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>Semantic search over text with an embedding index</h2>
+<p>Retrieval is the backbone of RAG. Pixeltable lets you attach an embedding index to a column and run similarity search with a single call -- the embeddings are computed and indexed for you as data arrives.</p>
+<pre><code class="language-python">import pixeltable as pxt
+
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+t = pxt.create_table("demo.docs", {"id": pxt.Int, "text": pxt.String})
+t.insert([
+    {"id": 1, "text": "Pixeltable stores and transforms multimodal data."},
+    {"id": 2, "text": "Cats are small domesticated carnivorous mammals."},
+    {"id": 3, "text": "Vector search finds semantically similar documents."},
+    {"id": 4, "text": "The Eiffel Tower is located in Paris, France."},
+])
+
+# A simple, deterministic, offline embedding so the demo needs no model files.
+@pxt.udf
+def toy_embed(s: str) -&gt; pxt.Array[(16,), pxt.Float]:
+    import numpy as np
+    v = np.zeros(16, dtype=np.float32)
+    for tok in s.lower().split():
+        v[hash(tok) % 16] += 1.0
+    n = np.linalg.norm(v)
+    return v / n if n else v
+
+t.add_embedding_index(column="text", string_embed=toy_embed)
+
+sim = t.text.similarity("searching for similar text with vectors")
+print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 5.77s):</p>
+<p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/gemma-4-12b-a-unified-encoder-free-multimodal-model/example.png"></p>
+<pre><code>id                                               text     score
+0   1  Pixeltable stores and transforms multimodal data.  0.666667
+1   4      The Eiffel Tower is located in Paris, France.  0.516398
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/rileykim/quick-tip-benchmarking-multimodal-apis-in-under-10-minutes-36f" rel="noopener noreferrer">Quick Tip: Benchmarking Multimodal APIs in Under 10 Minutes</a></li>
+<li><a href="https://dev.to/tsubasa_tech/beyond-transcription-multimodal-video-and-audio-analysis-with-snowflake-aicomplete-3g7c" rel="noopener noreferrer">Beyond Transcription - Multimodal Video and Audio Analysis with Snowflake AI_COMPLETE</a></li>
+<li><a href="https://dev.to/wonderlab/rag-series-23-multimodal-rag-images-and-tables-can-be-retrieved-too-3gj5" rel="noopener noreferrer">RAG Series (23): Multimodal RAG — Images and Tables Can Be Retrieved Too</a></li>
+<li><a href="https://dev.to/joseph_anady_214bacedf939/multimodal-search-6oc" rel="noopener noreferrer">Multimodal Search</a></li>
+<li><a href="https://dev.to/jangwook_kim_e31e7291ad98/nvidia-nemotron-3-nano-omni-multimodal-agent-dev-guide-54d7" rel="noopener noreferrer">NVIDIA Nemotron 3 Nano Omni: Multimodal Agent Dev Guide</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/gemma-4-12b-a-unified-encoder-free-multimodal-model.html</guid>
+      <category>multimodal</category>
+      <category>rag</category>
+      <category>agent</category>
+      <category>qwen</category>
+      <category>3.7</category>
+      <pubDate>Thu, 04 Jun 2026 14:00:23 +0000</pubDate>
+    </item>
     <item>
       <title>How to Handle How we index images for RAG with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/how-we-index-images-for-rag.html</link>
