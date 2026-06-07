@@ -34,7 +34,7 @@ hr { border: none; border-top: 1px solid #30363d; margin: 40px 0; }
 <p>Code2LoRA: Hypernetwork-Generated Adapters for Code Language Models under Software Evolution keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>rag, inference, fine-tuning, engineering, bot, search</strong>.</p>
+this topic: <strong>rag, inference, fine-tuning, engineering, bot, api</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -70,11 +70,11 @@ sim = t.text.similarity("searching for similar text with vectors")
 print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 6.45s):</p>
+exact snippet (ran in 4.99s):</p>
 <p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/code2lora-hypernetwork-generated-adapters-for-code-language-models-under-softwar/example.png"></p>
 <pre><code>id                                               text     score
-0   4      The Eiffel Tower is located in Paris, France.  0.547645
-1   1  Pixeltable stores and transforms multimodal data.  0.102019
+0   1  Pixeltable stores and transforms multimodal data.  0.577350
+1   4      The Eiffel Tower is located in Paris, France.  0.223607
 </code></pre>
 <p>That's not a mockup. The code above executed against Pixeltable and produced
 that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
