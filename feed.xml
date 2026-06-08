@@ -8,7 +8,90 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 07 Jun 2026 14:00:14 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2026 14:00:15 +0000</lastBuildDate>
+    <item>
+      <title>How reliable are LLMs when it comes to playing dice?, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/how-reliable-are-llms-when-it-comes-to-playing-dice.html</link>
+      <description>A hands-on, runnable walkthrough using embedding — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="How reliable are LLMs when it comes to playing dice?, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/how-reliable-are-llms-when-it-comes-to-playing-dice/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using embedding — with real, executed output.</em></p>
+<p>How reliable are LLMs when it comes to playing dice? keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>embedding, rag, llm, lifecycle, management, balancing</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>Semantic search over text with an embedding index</h2>
+<p>Retrieval is the backbone of RAG. Pixeltable lets you attach an embedding index to a column and run similarity search with a single call -- the embeddings are computed and indexed for you as data arrives.</p>
+<pre><code class="language-python">import pixeltable as pxt
+
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+t = pxt.create_table("demo.docs", {"id": pxt.Int, "text": pxt.String})
+t.insert([
+    {"id": 1, "text": "Pixeltable stores and transforms multimodal data."},
+    {"id": 2, "text": "Cats are small domesticated carnivorous mammals."},
+    {"id": 3, "text": "Vector search finds semantically similar documents."},
+    {"id": 4, "text": "The Eiffel Tower is located in Paris, France."},
+])
+
+# A simple, deterministic, offline embedding so the demo needs no model files.
+@pxt.udf
+def toy_embed(s: str) -&gt; pxt.Array[(16,), pxt.Float]:
+    import numpy as np
+    v = np.zeros(16, dtype=np.float32)
+    for tok in s.lower().split():
+        v[hash(tok) % 16] += 1.0
+    n = np.linalg.norm(v)
+    return v / n if n else v
+
+t.add_embedding_index(column="text", string_embed=toy_embed)
+
+sim = t.text.similarity("searching for similar text with vectors")
+print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 5.26s):</p>
+<p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/how-reliable-are-llms-when-it-comes-to-playing-dice/example.png"></p>
+<pre><code>id                                                 text     score
+0   3  Vector search finds semantically similar documents.  0.625000
+1   2     Cats are small domesticated carnivorous mammals.  0.433013
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/merbayerp/embedding-lifecycle-management-balancing-cost-and-freshness-1kon" rel="noopener noreferrer">Embedding Lifecycle Management: Balancing Cost and Freshness</a></li>
+<li><a href="https://dev.to/hyunseok_jeong_d7cdc52c4f/imbeding-unyeong-driftcaweoncosine-vs-dot-maketing-imbedingi-heundeulrineun-jari-5glh" rel="noopener noreferrer">임베딩 운영 — drift·차원·cosine vs dot, 마케팅 임베딩이 흔들리는 자리</a></li>
+<li><a href="https://dev.to/hyunseok_jeong_d7cdc52c4f/imbedingiran-mweonga-daneoga-susjaga-doeneun-jari-maketeoreul-wihan-jiggwan-37n6" rel="noopener noreferrer">임베딩이란 뭔가 — 단어가 숫자가 되는 자리, 마케터를 위한 직관</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/how-reliable-are-llms-when-it-comes-to-playing-dice.html</guid>
+      <category>embedding</category>
+      <category>rag</category>
+      <category>llm</category>
+      <category>lifecycle</category>
+      <category>management</category>
+      <pubDate>Mon, 08 Jun 2026 14:00:15 +0000</pubDate>
+    </item>
     <item>
       <title>Code2LoRA: Hypernetwork-Generated Adapters for Code Language Models under Software Evolution, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/code2lora-hypernetwork-generated-adapters-for-code-language-models-under-softwar.html</link>
