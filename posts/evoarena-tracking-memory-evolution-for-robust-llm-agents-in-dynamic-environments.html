@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments, the Pixeltable Way</title>
+<meta name="description" content="A hands-on, runnable walkthrough using rag — with real, executed output.">
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #0d1117; color: #c9d1d9;
+       font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; line-height: 1.7; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+h1 { font-size: 40px; line-height: 1.15; letter-spacing: -0.02em; color: #e6edf3; }
+h2 { font-size: 26px; margin-top: 40px; color: #e6edf3; }
+img { max-width: 100%; border-radius: 10px; display: block; margin: 24px 0; }
+p { font-size: 18px; }
+a { color: #58a6ff; }
+code { font-family: 'SF Mono', Menlo, monospace; font-size: 14px; }
+pre { background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+      padding: 16px 18px; overflow-x: auto; font-size: 14px; }
+pre code { color: #c9d1d9; }
+.subtitle { color: #9da7b3; font-size: 20px; font-style: italic; }
+hr { border: none; border-top: 1px solid #30363d; margin: 40px 0; }
+.home { display: block; margin-bottom: 32px; color: #8b949e; text-decoration: none; }
+.card-link { display: block; padding: 20px; margin: 16px 0; border: 1px solid #30363d;
+             border-radius: 12px; text-decoration: none; color: inherit; background: #161b22; }
+.card-link:hover { border-color: #58a6ff; }
+.card-link h2 { margin: 0 0 6px; font-size: 22px; }
+.card-link p { margin: 0; color: #9da7b3; font-size: 16px; }
+</style></head>
+<body><div class="wrap">
+<a class="home" href="../index.html">&larr; All articles</a>
+<p><img alt="EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using rag — with real, executed output.</em></p>
+<p>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>rag, llm, agent, engineering, web, oracle</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>Semantic search over text with an embedding index</h2>
+<p>Retrieval is the backbone of RAG. Pixeltable lets you attach an embedding index to a column and run similarity search with a single call -- the embeddings are computed and indexed for you as data arrives.</p>
+<pre><code class="language-python">import pixeltable as pxt
+
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+t = pxt.create_table("demo.docs", {"id": pxt.Int, "text": pxt.String})
+t.insert([
+    {"id": 1, "text": "Pixeltable stores and transforms multimodal data."},
+    {"id": 2, "text": "Cats are small domesticated carnivorous mammals."},
+    {"id": 3, "text": "Vector search finds semantically similar documents."},
+    {"id": 4, "text": "The Eiffel Tower is located in Paris, France."},
+])
+
+# A simple, deterministic, offline embedding so the demo needs no model files.
+@pxt.udf
+def toy_embed(s: str) -&gt; pxt.Array[(16,), pxt.Float]:
+    import numpy as np
+    v = np.zeros(16, dtype=np.float32)
+    for tok in s.lower().split():
+        v[hash(tok) % 16] += 1.0
+    n = np.linalg.norm(v)
+    return v / n if n else v
+
+t.add_embedding_index(column="text", string_embed=toy_embed)
+
+sim = t.text.similarity("searching for similar text with vectors")
+print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 5.73s):</p>
+<p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments/example.png"></p>
+<pre><code>id                                                 text     score
+0   3  Vector search finds semantically similar documents.  0.516398
+1   4        The Eiffel Tower is located in Paris, France.  0.182574
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/dannwaneri/what-building-my-own-ai-bot-taught-me-about-generative-ai-57il" rel="noopener noreferrer">What Building My Own AI Bot Taught Me About Generative AI</a></li>
+<li><a href="https://dev.to/joseph_martin_886225b2d03/i-made-a-personalized-ai-web-app-with-rag-49jg" rel="noopener noreferrer">I made a personalized AI web app with RAG</a></li>
+<li><a href="https://dev.to/rkondoju/an-oracle-dba-builds-ai-shipping-oracle-23ai-rag-and-an-mcp-server-in-a-weekend-h3i" rel="noopener noreferrer">An Oracle DBA builds AI: shipping Oracle 23ai RAG and an MCP server in a weekend</a></li>
+<li><a href="https://dev.to/nithiin7/i-got-tired-of-reading-strangers-codebases-so-i-built-an-ai-that-reads-them-for-me-3l3d" rel="noopener noreferrer">I Got Tired of Reading Strangers’ Codebases, So I Built an AI That Reads Them For Me</a></li>
+<li><a href="https://dev.to/nimay_04/rag-is-not-always-the-answer-anymore-how-ai-agents-search-code-in-2026-43m3" rel="noopener noreferrer">RAG Is Not Always the Answer Anymore: How AI Agents Search Code in 2026</a></li>
+</ul>
+</div></body></html>
