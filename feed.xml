@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 12 Jun 2026 14:00:15 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2026 14:00:16 +0000</lastBuildDate>
     <item>
       <title>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.html</link>
@@ -54,11 +54,11 @@ sim = t.text.similarity("searching for similar text with vectors")
 print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.73s):</p>
+exact snippet (ran in 5.62s):</p>
 <p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments/example.png"></p>
-<pre><code>id                                                 text     score
-0   3  Vector search finds semantically similar documents.  0.516398
-1   4        The Eiffel Tower is located in Paris, France.  0.182574
+<pre><code>id                                               text     score
+0   2   Cats are small domesticated carnivorous mammals.  0.833333
+1   1  Pixeltable stores and transforms multimodal data.  0.471405
 </code></pre>
 <p>That's not a mockup. The code above executed against Pixeltable and produced
 that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
@@ -92,7 +92,7 @@ doesn't change. That's the point.</p>
       <category>agent</category>
       <category>engineering</category>
       <category>web</category>
-      <pubDate>Fri, 12 Jun 2026 14:00:15 +0000</pubDate>
+      <pubDate>Sat, 13 Jun 2026 14:00:16 +0000</pubDate>
     </item>
     <item>
       <title>How to Handle Reroute, Don't Remove: Recoverable Visual Token Routing for Vision-Language Models with Pixeltable</title>
