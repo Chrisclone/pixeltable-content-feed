@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2026 14:00:16 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 14:00:17 +0000</lastBuildDate>
     <item>
       <title>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.html</link>
@@ -18,7 +18,7 @@
 <p>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>rag, llm, agent, engineering, web, oracle</strong>.</p>
+this topic: <strong>rag, llm, agent, engineering, web, testing</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -54,11 +54,11 @@ sim = t.text.similarity("searching for similar text with vectors")
 print(t.order_by(sim, asc=False).select(t.id, t.text, score=sim).limit(2).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.62s):</p>
+exact snippet (ran in 5.74s):</p>
 <p><img alt="Semantic search over text with an embedding index" src="https://chrisclone.github.io/pixeltable-content-feed/assets/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments/example.png"></p>
-<pre><code>id                                               text     score
-0   2   Cats are small domesticated carnivorous mammals.  0.833333
-1   1  Pixeltable stores and transforms multimodal data.  0.471405
+<pre><code>id                                                 text     score
+0   3  Vector search finds semantically similar documents.  0.510267
+1   2     Cats are small domesticated carnivorous mammals.  0.204038
 </code></pre>
 <p>That's not a mockup. The code above executed against Pixeltable and produced
 that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
@@ -81,9 +81,9 @@ doesn't change. That's the point.</p>
 <p><em>Researched against what's currently driving attention on this topic:</em></p>
 <ul>
 <li><a href="https://dev.to/dannwaneri/what-building-my-own-ai-bot-taught-me-about-generative-ai-57il" rel="noopener noreferrer">What Building My Own AI Bot Taught Me About Generative AI</a></li>
-<li><a href="https://dev.to/joseph_martin_886225b2d03/i-made-a-personalized-ai-web-app-with-rag-49jg" rel="noopener noreferrer">I made a personalized AI web app with RAG</a></li>
-<li><a href="https://dev.to/rkondoju/an-oracle-dba-builds-ai-shipping-oracle-23ai-rag-and-an-mcp-server-in-a-weekend-h3i" rel="noopener noreferrer">An Oracle DBA builds AI: shipping Oracle 23ai RAG and an MCP server in a weekend</a></li>
 <li><a href="https://dev.to/nithiin7/i-got-tired-of-reading-strangers-codebases-so-i-built-an-ai-that-reads-them-for-me-3l3d" rel="noopener noreferrer">I Got Tired of Reading Strangers’ Codebases, So I Built an AI That Reads Them For Me</a></li>
+<li><a href="https://dev.to/joseph_martin_886225b2d03/i-made-a-personalized-ai-web-app-with-rag-49jg" rel="noopener noreferrer">I made a personalized AI web app with RAG</a></li>
+<li><a href="https://dev.to/sshhfaiz/rag-based-testing-series-part-1-what-is-rag-why-your-old-testing-playbook-wont-work-here-11c3" rel="noopener noreferrer">RAG-Based Testing Series — Part 1: What Is RAG &amp; Why Your Old Testing Playbook Won't Work Here</a></li>
 <li><a href="https://dev.to/nimay_04/rag-is-not-always-the-answer-anymore-how-ai-agents-search-code-in-2026-43m3" rel="noopener noreferrer">RAG Is Not Always the Answer Anymore: How AI Agents Search Code in 2026</a></li>
 </ul>]]></content:encoded>
       <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.html</guid>
@@ -92,7 +92,7 @@ doesn't change. That's the point.</p>
       <category>agent</category>
       <category>engineering</category>
       <category>web</category>
-      <pubDate>Sat, 13 Jun 2026 14:00:16 +0000</pubDate>
+      <pubDate>Sun, 14 Jun 2026 14:00:17 +0000</pubDate>
     </item>
     <item>
       <title>How to Handle Reroute, Don't Remove: Recoverable Visual Token Routing for Vision-Language Models with Pixeltable</title>
