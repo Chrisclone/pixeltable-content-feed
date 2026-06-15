@@ -8,7 +8,92 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 14 Jun 2026 14:00:17 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 14:00:17 +0000</lastBuildDate>
+    <item>
+      <title>Gaze Heads: How VLMs Look at What They Describe, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/gaze-heads-how-vlms-look-at-what-they-describe.html</link>
+      <description>A hands-on, runnable walkthrough using multimodal — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Gaze Heads: How VLMs Look at What They Describe, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/gaze-heads-how-vlms-look-at-what-they-describe/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using multimodal — with real, executed output.</em></p>
+<p>Gaze Heads: How VLMs Look at What They Describe keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>multimodal, image, inference, rag, agent, qwen</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>A multimodal image table with computed columns</h2>
+<p>Pixeltable treats images as first-class data. Here we build a table of images, then add <em>computed columns</em> that derive new values automatically -- no manual loops, no glue code. New rows get the same transforms for free.</p>
+<pre><code class="language-python">import pixeltable as pxt
+from PIL import Image
+
+# A fresh, isolated workspace.
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+# Generate a few local images so the example is fully offline.
+import tempfile, os
+tmp = tempfile.mkdtemp()
+paths = []
+for i, color in enumerate([(220, 50, 50), (50, 180, 90), (60, 90, 220)]):
+    p = os.path.join(tmp, f"img_{i}.png")
+    Image.new("RGB", (256 + i * 32, 192), color).save(p)
+    paths.append(p)
+
+# Declare a table with an image column and insert the rows.
+t = pxt.create_table("demo.images", {"img": pxt.Image, "label": pxt.String})
+t.insert([{"img": p, "label": l} for p, l in zip(paths, ["red", "green", "blue"])])
+
+# Computed columns: derived automatically and kept in sync on insert.
+t.add_computed_column(width=t.img.width)
+t.add_computed_column(height=t.img.height)
+t.add_computed_column(thumb=t.img.resize([96, 96]))
+
+print(t.select(t.label, t.width, t.height).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 6.0s):</p>
+<p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/gaze-heads-how-vlms-look-at-what-they-describe/example.png"></p>
+<pre><code>label  width  height
+0    red    256     192
+1  green    288     192
+2   blue    320     192
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/rileykim/quick-tip-benchmarking-multimodal-apis-in-under-10-minutes-36f" rel="noopener noreferrer">Quick Tip: Benchmarking Multimodal APIs in Under 10 Minutes</a></li>
+<li><a href="https://dev.to/tsubasa_tech/beyond-transcription-multimodal-video-and-audio-analysis-with-snowflake-aicomplete-3g7c" rel="noopener noreferrer">Beyond Transcription - Multimodal Video and Audio Analysis with Snowflake AI_COMPLETE</a></li>
+<li><a href="https://dev.to/wonderlab/rag-series-23-multimodal-rag-images-and-tables-can-be-retrieved-too-3gj5" rel="noopener noreferrer">RAG Series (23): Multimodal RAG — Images and Tables Can Be Retrieved Too</a></li>
+<li><a href="https://dev.to/joseph_anady_214bacedf939/multimodal-search-6oc" rel="noopener noreferrer">Multimodal Search</a></li>
+<li><a href="https://dev.to/jangwook_kim_e31e7291ad98/nvidia-nemotron-3-nano-omni-multimodal-agent-dev-guide-54d7" rel="noopener noreferrer">NVIDIA Nemotron 3 Nano Omni: Multimodal Agent Dev Guide</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/gaze-heads-how-vlms-look-at-what-they-describe.html</guid>
+      <category>multimodal</category>
+      <category>image</category>
+      <category>inference</category>
+      <category>rag</category>
+      <category>agent</category>
+      <pubDate>Mon, 15 Jun 2026 14:00:17 +0000</pubDate>
+    </item>
     <item>
       <title>EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.html</link>
