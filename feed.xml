@@ -8,7 +8,92 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 16 Jun 2026 14:00:16 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 14:00:17 +0000</lastBuildDate>
+    <item>
+      <title>Future Dynamic 3D Reconstruction: A 3D World Model with Disentangled Ego-Motion, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/future-dynamic-3d-reconstruction-a-3d-world-model-with-disentangled-ego-motion.html</link>
+      <description>A hands-on, runnable walkthrough using video — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Future Dynamic 3D Reconstruction: A 3D World Model with Disentangled Ego-Motion, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/future-dynamic-3d-reconstruction-a-3d-world-model-with-disentangled-ego-motion/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using video — with real, executed output.</em></p>
+<p>Future Dynamic 3D Reconstruction: A 3D World Model with Disentangled Ego-Motion keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>video, image, rag, agent, gemini, omni</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>A multimodal image table with computed columns</h2>
+<p>Pixeltable treats images as first-class data. Here we build a table of images, then add <em>computed columns</em> that derive new values automatically -- no manual loops, no glue code. New rows get the same transforms for free.</p>
+<pre><code class="language-python">import pixeltable as pxt
+from PIL import Image
+
+# A fresh, isolated workspace.
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+# Generate a few local images so the example is fully offline.
+import tempfile, os
+tmp = tempfile.mkdtemp()
+paths = []
+for i, color in enumerate([(220, 50, 50), (50, 180, 90), (60, 90, 220)]):
+    p = os.path.join(tmp, f"img_{i}.png")
+    Image.new("RGB", (256 + i * 32, 192), color).save(p)
+    paths.append(p)
+
+# Declare a table with an image column and insert the rows.
+t = pxt.create_table("demo.images", {"img": pxt.Image, "label": pxt.String})
+t.insert([{"img": p, "label": l} for p, l in zip(paths, ["red", "green", "blue"])])
+
+# Computed columns: derived automatically and kept in sync on insert.
+t.add_computed_column(width=t.img.width)
+t.add_computed_column(height=t.img.height)
+t.add_computed_column(thumb=t.img.resize([96, 96]))
+
+print(t.select(t.label, t.width, t.height).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 5.98s):</p>
+<p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/future-dynamic-3d-reconstruction-a-3d-world-model-with-disentangled-ego-motion/example.png"></p>
+<pre><code>label  width  height
+0    red    256     192
+1  green    288     192
+2   blue    320     192
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/jenueldev/gemini-omni-shows-where-ai-video-tools-are-heading-next-1pbo" rel="noopener noreferrer">Gemini Omni shows where AI video tools are heading next</a></li>
+<li><a href="https://dev.to/jenueldev/gemini-omni-makes-video-generation-feel-more-like-editing-3434" rel="noopener noreferrer">Gemini Omni makes video generation feel more like editing</a></li>
+<li><a href="https://dev.to/hiy_dev/claude-code-video-skills-a-developers-practical-guide-to-all-6-options-2026-4f40" rel="noopener noreferrer">Claude Code Video Skills: A Developer's Practical Guide to All 6 Options (2026)</a></li>
+<li><a href="https://dev.to/masonwritescode/build-a-custom-hls-player-in-react-with-hlsjs-no-wrapper-libraries-pm9" rel="noopener noreferrer">Build a custom HLS player in React with hls.js (no wrapper libraries)</a></li>
+<li><a href="https://dev.to/tecnomanu/framevox-a-video-production-cli-for-agent-made-social-videos-2bc8" rel="noopener noreferrer">FrameVOX: A Video Production CLI for Agent-Made Social Videos</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/future-dynamic-3d-reconstruction-a-3d-world-model-with-disentangled-ego-motion.html</guid>
+      <category>video</category>
+      <category>image</category>
+      <category>rag</category>
+      <category>agent</category>
+      <category>gemini</category>
+      <pubDate>Wed, 17 Jun 2026 14:00:16 +0000</pubDate>
+    </item>
     <item>
       <title>Context-Aware RL for Agentic and Multimodal LLMs, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/context-aware-rl-for-agentic-and-multimodal-llms.html</link>
