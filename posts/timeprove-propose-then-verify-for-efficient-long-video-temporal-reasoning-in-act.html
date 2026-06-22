@@ -34,7 +34,7 @@ hr { border: none; border-top: 1px solid #30363d; margin: 40px 0; }
 <p>TimeProVe: Propose, then Verify for Efficient Long Video Temporal Reasoning in Activities of Daily Living keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>video, llm, inference, gemini, omni, 2026</strong>.</p>
+this topic: <strong>video, llm, inference, gemini, omni, editing</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -69,7 +69,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.24s):</p>
+exact snippet (ran in 5.41s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/timeprove-propose-then-verify-for-efficient-long-video-temporal-reasoning-in-act/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
