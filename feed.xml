@@ -8,7 +8,92 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 24 Jun 2026 14:00:18 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 14:00:19 +0000</lastBuildDate>
+    <item>
+      <title>Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models, the Pixeltable Way</title>
+      <link>https://chrisclone.github.io/pixeltable-content-feed/posts/same-evidence-different-answer-auditing-order-sensitivity-in-multimodal-large-la.html</link>
+      <description>A hands-on, runnable walkthrough using multimodal — with real, executed output.</description>
+      <content:encoded><![CDATA[<p><img alt="Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/same-evidence-different-answer-auditing-order-sensitivity-in-multimodal-large-la/hero.png"></p>
+<p><em>A hands-on, runnable walkthrough using multimodal — with real, executed output.</em></p>
+<p>Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models keeps showing up in the feeds I track — and for good reason. The hard
+part is rarely the idea; it's the plumbing: wiring data, transforms, and models
+together without it turning into a pile of glue scripts. Recurring themes around
+this topic: <strong>multimodal, image, llm, 2026, qwen, 3.7</strong>.</p>
+<p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
+earns its keep. It gives you a declarative table where derived values are
+<em>computed columns</em> — define the transform once and it stays in sync as data
+arrives. No DAGs to wire, no batch jobs to babysit.</p>
+<h2>A multimodal image table with computed columns</h2>
+<p>Pixeltable treats images as first-class data. Here we build a table of images, then add <em>computed columns</em> that derive new values automatically -- no manual loops, no glue code. New rows get the same transforms for free.</p>
+<pre><code class="language-python">import pixeltable as pxt
+from PIL import Image
+
+# A fresh, isolated workspace.
+pxt.drop_dir("demo", force=True)
+pxt.create_dir("demo")
+
+# Generate a few local images so the example is fully offline.
+import tempfile, os
+tmp = tempfile.mkdtemp()
+paths = []
+for i, color in enumerate([(220, 50, 50), (50, 180, 90), (60, 90, 220)]):
+    p = os.path.join(tmp, f"img_{i}.png")
+    Image.new("RGB", (256 + i * 32, 192), color).save(p)
+    paths.append(p)
+
+# Declare a table with an image column and insert the rows.
+t = pxt.create_table("demo.images", {"img": pxt.Image, "label": pxt.String})
+t.insert([{"img": p, "label": l} for p, l in zip(paths, ["red", "green", "blue"])])
+
+# Computed columns: derived automatically and kept in sync on insert.
+t.add_computed_column(width=t.img.width)
+t.add_computed_column(height=t.img.height)
+t.add_computed_column(thumb=t.img.resize([96, 96]))
+
+print(t.select(t.label, t.width, t.height).collect())
+</code></pre>
+<p>Run it and you get real output — here's the actual result captured from this
+exact snippet (ran in 6.61s):</p>
+<p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/same-evidence-different-answer-auditing-order-sensitivity-in-multimodal-large-la/example.png"></p>
+<pre><code>label  width  height
+0    red    256     192
+1  green    288     192
+2   blue    320     192
+</code></pre>
+<p>That's not a mockup. The code above executed against Pixeltable and produced
+that table. Swap the toy pieces (a UDF, a local embedding) for production ones —
+a real model endpoint, a managed embedding — and the <em>shape</em> of your code
+doesn't change. That's the point.</p>
+<h2>Takeaways</h2>
+<ul>
+<li><strong>Declarative beats imperative</strong> for data + AI: say what you want computed,
+  not how to schedule it.</li>
+<li><strong>Computed columns stay in sync</strong> automatically as new rows land.</li>
+<li><strong>Multimodal is first-class</strong> — images, video, audio, and text live in the
+  same table as your scalars.</li>
+</ul>
+<h2>Try it yourself</h2>
+<pre><code class="language-bash">pip install pixeltable
+</code></pre>
+<p>Then drop the snippet above into a module and run it. Full docs:
+<a href="https://docs.pixeltable.com" rel="noopener noreferrer">https://docs.pixeltable.com</a>.</p>
+<hr>
+<p><em>Researched against what's currently driving attention on this topic:</em></p>
+<ul>
+<li><a href="https://dev.to/creeta/is-omnis-conversational-video-editor-as-good-as-the-demos-4pj0" rel="noopener noreferrer">Is Omni's conversational video editor as good as the demos?</a></li>
+<li><a href="https://dev.to/natcher/google-deepminds-gemma-4-12b-ai-model-enables-accessibility-on-standard-laptops-expanding-ai-501o" rel="noopener noreferrer">Google DeepMind's Gemma 4 12B AI Model Enables Accessibility on Standard Laptops, Expanding AI Applications</a></li>
+<li><a href="https://dev.to/owen_fox/qwen-37-plus-vs-qwen-37-max-in-2026-multimodal-agent-or-pure-text-flagship-real-benchmarks--p2c" rel="noopener noreferrer">Qwen 3.7 Plus vs Qwen 3.7 Max in 2026: Multimodal Agent or Pure-Text Flagship? Real Benchmarks + Pricing</a></li>
+<li><a href="https://dev.to/claudeguide/claude-files-api-how-to-upload-reuse-and-manage-files-2026-52b6" rel="noopener noreferrer">Claude Files API: How to Upload, Reuse, and Manage Files (2026)</a></li>
+<li><a href="https://dev.to/alichherawalla/off-grid-ai-desktop-the-only-fully-local-multimodal-ai-app-in-2026-4a7g" rel="noopener noreferrer">Off Grid AI Desktop: The Only Fully Local, Multimodal AI App in 2026</a></li>
+</ul>]]></content:encoded>
+      <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/same-evidence-different-answer-auditing-order-sensitivity-in-multimodal-large-la.html</guid>
+      <category>multimodal</category>
+      <category>image</category>
+      <category>llm</category>
+      <category>2026</category>
+      <category>qwen</category>
+      <pubDate>Thu, 25 Jun 2026 14:00:19 +0000</pubDate>
+    </item>
     <item>
       <title>BenchX: Benchmarking AI Models for Cancer Detection and Localization with Demographic and Protocol Biases, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/benchx-benchmarking-ai-models-for-cancer-detection-and-localization-with-demogra.html</link>
