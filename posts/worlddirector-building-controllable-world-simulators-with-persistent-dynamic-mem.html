@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory, the Pixeltable Way</title>
+<title>How to Handle WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory with Pixeltable</title>
 <meta name="description" content="A hands-on, runnable walkthrough using video — with real, executed output.">
 <style>
 :root { color-scheme: dark; }
@@ -29,12 +29,12 @@ hr { border: none; border-top: 1px solid #30363d; margin: 40px 0; }
 </style></head>
 <body><div class="wrap">
 <a class="home" href="../index.html">&larr; All articles</a>
-<p><img alt="WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory, the Pixeltable Way" src="https://chrisclone.github.io/pixeltable-content-feed/assets/worlddirector-building-controllable-world-simulators-with-persistent-dynamic-mem/hero.png"></p>
+<p><img alt="How to Handle WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory with Pixeltable" src="https://chrisclone.github.io/pixeltable-content-feed/assets/worlddirector-building-controllable-world-simulators-with-persistent-dynamic-mem/hero.png"></p>
 <p><em>A hands-on, runnable walkthrough using video — with real, executed output.</em></p>
 <p>WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>video, rag, llm, ffmpeg, gemini, omni</strong>.</p>
+this topic: <strong>video, rag, llm, ffmpeg, hls, media</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -69,7 +69,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.06s):</p>
+exact snippet (ran in 5.28s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/worlddirector-building-controllable-world-simulators-with-persistent-dynamic-mem/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -96,10 +96,10 @@ doesn't change. That's the point.</p>
 <hr>
 <p><em>Researched against what's currently driving attention on this topic:</em></p>
 <ul>
+<li><a href="https://dev.to/larryxue/how-i-built-a-browser-based-video-to-powerpoint-converter-ag0" rel="noopener noreferrer">How I Built a Browser-Based Video to PowerPoint Converter</a></li>
 <li><a href="https://dev.to/jenueldev/gemini-omni-shows-where-ai-video-tools-are-heading-next-1pbo" rel="noopener noreferrer">Gemini Omni shows where AI video tools are heading next</a></li>
 <li><a href="https://dev.to/tecnomanu/framevox-a-video-production-cli-for-agent-made-social-videos-2bc8" rel="noopener noreferrer">FrameVOX: A Video Production CLI for Agent-Made Social Videos</a></li>
 <li><a href="https://dev.to/masonwritescode/build-scrub-bar-thumbnail-previews-with-ffmpeg-and-a-webvtt-sprite-3ei2" rel="noopener noreferrer">Build scrub-bar thumbnail previews with FFmpeg and a WebVTT sprite</a></li>
-<li><a href="https://dev.to/javidjamae/auto-generate-youtube-thumbnails-from-any-video-makecom-ffmpeg-530k" rel="noopener noreferrer">Auto-Generate YouTube Thumbnails from Any Video (Make.com + FFmpeg)</a></li>
-<li><a href="https://dev.to/ycbing/i-built-an-ai-studio-that-turns-1-line-of-text-into-a-5-minute-short-drama-j01" rel="noopener noreferrer">I Built an AI Studio That Turns 1 Line of Text Into a 5-Minute Short Drama</a></li>
+<li><a href="https://dev.to/masonwritescode/playing-hls-through-managed-media-source-on-iphone-with-hlsjs-3cn8" rel="noopener noreferrer">Playing HLS through Managed Media Source on iPhone with hls.js</a></li>
 </ul>
 </div></body></html>
