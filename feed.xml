@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Jul 2026 14:00:15 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jul 2026 14:00:14 +0000</lastBuildDate>
     <item>
       <title>How to Handle Hierarchical Denoising For Multi-Step Visual Reasoning with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/hierarchical-denoising-for-multi-step-visual-reasoning.html</link>
@@ -53,7 +53,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.19s):</p>
+exact snippet (ran in 5.12s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/hierarchical-denoising-for-multi-step-visual-reasoning/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -92,7 +92,7 @@ doesn't change. That's the point.</p>
       <category>inference</category>
       <category>hls</category>
       <category>hls.js</category>
-      <pubDate>Sat, 18 Jul 2026 14:00:15 +0000</pubDate>
+      <pubDate>Sun, 19 Jul 2026 14:00:14 +0000</pubDate>
     </item>
     <item>
       <title>How to Handle VideoRAE: Taming Video Foundation Models for Generative Modeling via Representation Autoencoders with Pixeltable</title>
