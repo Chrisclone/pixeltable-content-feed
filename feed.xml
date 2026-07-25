@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 24 Jul 2026 14:00:22 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 25 Jul 2026 14:00:20 +0000</lastBuildDate>
     <item>
       <title>How to Handle Self-Supervised Learning of Structured Dynamics from Videos with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/self-supervised-learning-of-structured-dynamics-from-videos.html</link>
@@ -53,7 +53,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 9.5s):</p>
+exact snippet (ran in 7.15s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/self-supervised-learning-of-structured-dynamics-from-videos/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -92,7 +92,7 @@ doesn't change. That's the point.</p>
       <category>rag</category>
       <category>diff</category>
       <category>flux</category>
-      <pubDate>Fri, 24 Jul 2026 14:00:21 +0000</pubDate>
+      <pubDate>Sat, 25 Jul 2026 14:00:20 +0000</pubDate>
     </item>
     <item>
       <title>Show HN: Cactus Hybrid: We taught Gemma 4 to know when it's wrong, the Pixeltable Way</title>
