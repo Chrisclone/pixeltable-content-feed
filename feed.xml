@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 25 Jul 2026 14:00:20 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jul 2026 14:00:21 +0000</lastBuildDate>
     <item>
       <title>How to Handle Self-Supervised Learning of Structured Dynamics from Videos with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/self-supervised-learning-of-structured-dynamics-from-videos.html</link>
@@ -18,7 +18,7 @@
 <p>Self-Supervised Learning of Structured Dynamics from Videos keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>video, image, rag, diff, flux, 4070</strong>.</p>
+this topic: <strong>video, image, rag, hls, hls.js, diff</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -53,7 +53,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 7.15s):</p>
+exact snippet (ran in 8.21s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/self-supervised-learning-of-structured-dynamics-from-videos/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -90,9 +90,9 @@ doesn't change. That's the point.</p>
       <category>video</category>
       <category>image</category>
       <category>rag</category>
-      <category>diff</category>
-      <category>flux</category>
-      <pubDate>Sat, 25 Jul 2026 14:00:20 +0000</pubDate>
+      <category>hls</category>
+      <category>hls.js</category>
+      <pubDate>Sun, 26 Jul 2026 14:00:20 +0000</pubDate>
     </item>
     <item>
       <title>Show HN: Cactus Hybrid: We taught Gemma 4 to know when it's wrong, the Pixeltable Way</title>
