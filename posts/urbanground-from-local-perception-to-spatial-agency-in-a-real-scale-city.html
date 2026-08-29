@@ -34,7 +34,7 @@ hr { border: none; border-top: 1px solid #30363d; margin: 40px 0; }
 <p>UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>multimodal, llm, agent, vision, video, audio</strong>.</p>
+this topic: <strong>multimodal, llm, agent, video, audio, knowledge</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -69,7 +69,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 6.04s):</p>
+exact snippet (ran in 5.06s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/urbanground-from-local-perception-to-spatial-agency-in-a-real-scale-city/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -99,7 +99,7 @@ doesn't change. That's the point.</p>
 <li><a href="https://dev.to/jubinsoni/video-and-audio-as-knowledge-sources-content-understanding-into-microsoft-foundry-iq-56o5" rel="noopener noreferrer">Video and Audio as Knowledge Sources: Content Understanding into Microsoft Foundry IQ</a></li>
 <li><a href="https://dev.to/forestlioooooo/deepseeks-vision-lineage-from-deepseek-vl-to-vision-exp-45ki" rel="noopener noreferrer">DeepSeek's Vision Lineage: From DeepSeek-VL to Vision-Exp</a></li>
 <li><a href="https://dev.to/syedmuhammadaliraza/multimodal-ai-explained-teaching-models-to-see-and-hear-not-just-read-1hb" rel="noopener noreferrer">Multimodal AI Explained (Teaching Models to See and Hear, Not Just Read)</a></li>
+<li><a href="https://dev.to/sanyaduan/dang-an-quan-yun-ying-bu-zai-zhi-shi-du-wen-ben-duo-mo-tai-airu-he-zhong-xie-wei-xie-jian-ce-de-di-ceng-luo-ji-404i" rel="noopener noreferrer">当安全运营不再只是「读文本」：多模态AI如何重写威胁检测的底层逻辑</a></li>
 <li><a href="https://dev.to/rivenor85/upload-moderation-nodejs-nsfw-violence-hate-symbol-classification-json-fallback-2fga" rel="noopener noreferrer">Upload Moderation: Node.js NSFW, Violence, Hate-Symbol Classification + JSON Fallback</a></li>
-<li><a href="https://dev.to/devsignal/local-llms-go-multimodal-vercel-functions-expand-dev-signal-85-20ig" rel="noopener noreferrer">Local LLMs Go Multimodal, Vercel Functions Expand: Dev Signal #85</a></li>
 </ul>
 </div></body></html>
