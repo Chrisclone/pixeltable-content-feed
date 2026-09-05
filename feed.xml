@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 04 Sep 2026 14:00:15 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 05 Sep 2026 14:00:20 +0000</lastBuildDate>
     <item>
       <title>Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for Weakly-Supervised Dense Video Captioning, the Pixeltable Way</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/seeing-before-synthesizing-vlm-guided-transition-event-discovery-for-weakly-supe.html</link>
@@ -53,7 +53,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.71s):</p>
+exact snippet (ran in 7.18s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/seeing-before-synthesizing-vlm-guided-transition-event-discovery-for-weakly-supe/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -81,10 +81,10 @@ doesn't change. That's the point.</p>
 <p><em>Researched against what's currently driving attention on this topic:</em></p>
 <ul>
 <li><a href="https://dev.to/dhseadev/i-asked-an-agent-to-make-a-product-video-it-wrote-html-and-rendered-an-mp4-dota-companion-1nia" rel="noopener noreferrer">I asked an agent to make a product video. It wrote HTML and rendered an MP4 - Dota Companion</a></li>
-<li><a href="https://dev.to/lizely/picking-the-right-video-compression-path-for-web-delivery-a-practical-decision-guide-3fj5" rel="noopener noreferrer">Picking the Right Video Compression Path for Web Delivery: A Practical Decision Guide</a></li>
 <li><a href="https://dev.to/dhseadev/html-in-mp4-out-rendering-a-video-with-hyperframes-instead-of-an-editor-koo" rel="noopener noreferrer">HTML in, MP4 out: rendering a video with HyperFrames instead of an editor</a></li>
 <li><a href="https://dev.to/masonwritescode/build-semantic-search-inside-video-shot-embeddings-transcript-chunks-fused-on-the-timeline-2nbb" rel="noopener noreferrer">Build semantic search inside video: shot embeddings + transcript chunks, fused on the timeline</a></li>
 <li><a href="https://dev.to/snipforge/the-video-that-played-everywhere-except-on-phones-a-codec-bug-hiding-behind-a-healthy-server-4aff" rel="noopener noreferrer">The Video That Played Everywhere Except on Phones: A Codec Bug Hiding Behind a Healthy Server.</a></li>
+<li><a href="https://dev.to/masonwritescode/build-a-long-video-to-vertical-clips-pipeline-metadata-in-ranked-916-clips-out-epo" rel="noopener noreferrer">Build a long-video to vertical-clips pipeline: metadata in, ranked 9:16 clips out</a></li>
 </ul>]]></content:encoded>
       <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/seeing-before-synthesizing-vlm-guided-transition-event-discovery-for-weakly-supe.html</guid>
       <category>video</category>
@@ -92,7 +92,7 @@ doesn't change. That's the point.</p>
       <category>llm</category>
       <category>build</category>
       <category>html</category>
-      <pubDate>Fri, 04 Sep 2026 14:00:15 +0000</pubDate>
+      <pubDate>Sat, 05 Sep 2026 14:00:20 +0000</pubDate>
     </item>
     <item>
       <title>Large Language Models (LLMs) for Telecom Root Cause Analysis (RCA): A Structured Reasoning Framework for Evidence-Grounded Diagnosis, the Pixeltable Way</title>
