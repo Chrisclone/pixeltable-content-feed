@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 19 Sep 2026 14:00:16 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 Sep 2026 14:00:17 +0000</lastBuildDate>
     <item>
       <title>How to Handle Paint-Anything: Unified Any-Color Control for Image Generation and Editing with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/paint-anything-unified-any-color-control-for-image-generation-and-editing.html</link>
@@ -18,7 +18,7 @@
 <p>Paint-Anything: Unified Any-Color Control for Image Generation and Editing keeps showing up in the feeds I track — and for good reason. The hard
 part is rarely the idea; it's the plumbing: wiring data, transforms, and models
 together without it turning into a pile of glue scripts. Recurring themes around
-this topic: <strong>image, rag, inference, data pipeline, decision, text</strong>.</p>
+this topic: <strong>image, rag, inference, data pipeline, images, web</strong>.</p>
 <p>This is exactly where <a href="https://github.com/pixeltable/pixeltable" rel="noopener noreferrer">Pixeltable</a>
 earns its keep. It gives you a declarative table where derived values are
 <em>computed columns</em> — define the transform once and it stays in sync as data
@@ -53,7 +53,7 @@ t.add_computed_column(thumb=t.img.resize([96, 96]))
 print(t.select(t.label, t.width, t.height).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 5.78s):</p>
+exact snippet (ran in 5.23s):</p>
 <p><img alt="A multimodal image table with computed columns" src="https://chrisclone.github.io/pixeltable-content-feed/assets/paint-anything-unified-any-color-control-for-image-generation-and-editing/example.png"></p>
 <pre><code>label  width  height
 0    red    256     192
@@ -80,19 +80,19 @@ doesn't change. That's the point.</p>
 <hr>
 <p><em>Researched against what's currently driving attention on this topic:</em></p>
 <ul>
-<li><a href="https://dev.to/lizely/picking-the-right-way-to-turn-jpg-files-into-png-an-engineers-decision-guide-3pj8" rel="noopener noreferrer">Picking the Right Way to Turn JPG Files Into PNG: An Engineer's Decision Guide</a></li>
 <li><a href="https://dev.to/voorai/how-to-replace-text-on-a-sign-with-ai-and-test-every-untouched-pixel-3lil" rel="noopener noreferrer">How to Replace Text on a Sign With AI and Test Every Untouched Pixel</a></li>
 <li><a href="https://dev.to/filotool/i-benchmarked-avif-vs-webp-on-real-images-and-the-best-format-flipped-depending-on-what-i-dh4" rel="noopener noreferrer">I benchmarked AVIF vs WebP on real images, and the "best" format flipped depending on what I compressed</a></li>
 <li><a href="https://dev.to/lizely/how-to-crop-an-image-for-the-web-a-decision-guide-for-engineers-and-editors-38ed" rel="noopener noreferrer">How to Crop an Image for the Web: A Decision Guide for Engineers and Editors</a></li>
-<li><a href="https://dev.to/grahamprice3746/moderate-text-prompts-for-ai-image-generation-without-an-endpoint-gaming-tenant-ledgers-3e9g" rel="noopener noreferrer">Moderate Text Prompts for AI Image Generation Without an Endpoint: Gaming Tenant Ledgers</a></li>
+<li><a href="https://dev.to/ephraimpierce7934/image-asset-extraction-async-jobs-validation-retries-and-load-safe-latency-2ogj" rel="noopener noreferrer">Image Asset Extraction: Async Jobs, Validation, Retries, and Load-Safe Latency</a></li>
+<li><a href="https://dev.to/kiernanberg3867/cancel-running-image-batch-api-jobs-a-4-check-video-research-approach-1hk2" rel="noopener noreferrer">Cancel Running Image Batch API Jobs — A 4-Check Video Research Approach</a></li>
 </ul>]]></content:encoded>
       <guid isPermaLink="true">https://chrisclone.github.io/pixeltable-content-feed/posts/paint-anything-unified-any-color-control-for-image-generation-and-editing.html</guid>
       <category>image</category>
       <category>rag</category>
       <category>inference</category>
       <category>data pipeline</category>
-      <category>decision</category>
-      <pubDate>Sat, 19 Sep 2026 14:00:15 +0000</pubDate>
+      <category>images</category>
+      <pubDate>Sun, 20 Sep 2026 14:00:17 +0000</pubDate>
     </item>
     <item>
       <title>A Zeroth-Order Paradigm for LLM Preference Alignment, the Pixeltable Way</title>
