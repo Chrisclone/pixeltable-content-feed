@@ -8,7 +8,7 @@
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-feedgen</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Oct 2026 14:00:14 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 03 Oct 2026 14:00:19 +0000</lastBuildDate>
     <item>
       <title>How to Handle KaliBench: A Fine-Grained Benchmark for Cybersecurity Tool Use on Kali Linux with Runtime-Free Verifiable Rewards with Pixeltable</title>
       <link>https://chrisclone.github.io/pixeltable-content-feed/posts/kalibench-a-fine-grained-benchmark-for-cybersecurity-tool-use-on-kali-linux-with.html</link>
@@ -47,7 +47,7 @@ t.add_computed_column(response=respond(t.prompt))
 print(t.select(t.id, t.response).collect())
 </code></pre>
 <p>Run it and you get real output — here's the actual result captured from this
-exact snippet (ran in 4.63s):</p>
+exact snippet (ran in 4.58s):</p>
 <p><img alt="A declarative inference pipeline with a Python UDF" src="https://chrisclone.github.io/pixeltable-content-feed/assets/kalibench-a-fine-grained-benchmark-for-cybersecurity-tool-use-on-kali-linux-with/example.png"></p>
 <pre><code>id                                     response
 0   1            [summarize] -&gt; processed 50 chars
@@ -86,7 +86,7 @@ doesn't change. That's the point.</p>
       <category>agent</category>
       <category>model</category>
       <category>mcp</category>
-      <pubDate>Fri, 02 Oct 2026 14:00:14 +0000</pubDate>
+      <pubDate>Sat, 03 Oct 2026 14:00:19 +0000</pubDate>
     </item>
     <item>
       <title>Multimodal Flow: Unified Flow Modeling of Language and Vision in Embedding Spaces, the Pixeltable Way</title>
